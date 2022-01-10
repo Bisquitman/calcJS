@@ -209,6 +209,28 @@ const moveTotal = () => {
   }
 };
 
+const renderResponse = (response) => {
+  if (response.ok) {
+    hideElem(total);
+    cardHead.textContent = 'Заявка успешно отправлена на сервер. С вами скоро свяжутся.';
+    cardHead.style.color = 'green';
+  }
+};
+
+const formSubmit = (event) => {
+  event.preventDefault();
+
+  const data = new FormData(event.target)
+
+  fetch('./server.php', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+    body: data,
+  }).then(renderResponse).catch(error => console.log('error: ', error));
+}
+
 startBtn.addEventListener('click', () => {
   showElem(mainForm);
   hideElem(firstScreen);
@@ -230,5 +252,6 @@ endBtn.addEventListener('click', () => {
 });
 
 formCalculate.addEventListener('change', handlerCallBackForm);
+formCalculate.addEventListener('submit', formSubmit);
 
 priceCalculation();
